@@ -18,5 +18,5 @@ export const env = {
   MONGODB_URI: getEnv('MONGODB_URI'),
   JWT_ACCESS_SECRET: getEnv('JWT_ACCESS_SECRET'),
   JWT_ACCESS_EXPIRES_IN: getEnv('JWT_ACCESS_EXPIRES_IN', '7d'),
-  CLIENT_ORIGIN: getEnv('CLIENT_ORIGIN', 'http://localhost:5173'),
+  CLIENT_ORIGIN: process.env.CLIENT_ORIGIN || process.env.CORS_ORIGIN || '*',
 };

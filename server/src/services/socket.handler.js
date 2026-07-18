@@ -4,7 +4,7 @@ import { registerSocketEvents } from './game/EventRegistry.js';
 export const initSocketServer = (server, clientOrigin) => {
   const io = new Server(server, {
     cors: {
-      origin: clientOrigin,
+      origin: (origin, callback) => callback(null, true),
       credentials: true,
       methods: ['GET', 'POST'],
     },

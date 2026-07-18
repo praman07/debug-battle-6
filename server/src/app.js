@@ -13,9 +13,21 @@ import notFoundMiddleware from './middlewares/notFound.middleware.js';
 
 const app = express();
 
+// Enable trust proxy for Render / cloud reverse proxies
+app.set('trust proxy', 1);
+
 // ─── Security ────────────────────────────────────────────────────────
 app.use(cors({
-  origin: env.CLIENT_ORIGIN || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    if (!origin || env.CLIENT_ORIGIN === '*' || origin.includes('localhost') || origin.includes('127.0.0.1')) {
+      return callback(null, true);
+    }
+    const target = (env.CLIENT_ORIGIN || '').replace(/\/$/, '');
+    if (origin.replace(/\/$/, '') === target) {
+      return callback(null, true);
+    }
+    return callback(null, true);
+  },
   credentials: true,
 }));
 app.use(helmet());
