@@ -1,10 +1,19 @@
 import { io } from 'socket.io-client';
 
-const socketUrl = import.meta.env.VITE_SOCKET_URL || (
-  window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+const rawSocketUrl = import.meta.env.VITE_SOCKET_URL;
+
+const socketUrl = (() => {
+  if (rawSocketUrl && rawSocketUrl.trim()) {
+    let formatted = rawSocketUrl.trim();
+    if (!formatted.startsWith('http://') && !formatted.startsWith('https://')) {
+      formatted = `https://${formatted}`;
+    }
+    return formatted;
+  }
+  return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? 'http://localhost:5000'
-    : window.location.origin
-);
+    : window.location.origin;
+})();
 
 // Single production-grade socket instance
 export const socket = io(socketUrl, {
