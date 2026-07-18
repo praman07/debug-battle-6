@@ -59,6 +59,10 @@ app.use(compression());
 app.use('/api', routes);
 
 // ─── Health check ────────────────────────────────────────────────────────────
+app.get('/', (_req, res) => {
+  res.status(200).json({ status: 'ok', message: 'Debug Battle API Server Running' });
+});
+
 app.get('/health', (_req, res) => {
   res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
 });
